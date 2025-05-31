@@ -56,7 +56,7 @@ app.use(compression());
 app.use(morgan('combined'));
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname)));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -67,11 +67,6 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/stripe', stripeRoutes);
 
-// Serve frontend files
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 // API Health check
 app.get('/api/health', (req, res) => {
     res.json({
@@ -80,6 +75,24 @@ app.get('/api/health', (req, res) => {
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV || 'development'
     });
+});
+
+// Handle 404 for API routes
+app.use('/api/*', (req, res) => {
+    res.status(404).json({
+        error: 'API endpoint not found',
+        path: req.originalUrl
+    });
+});
+
+// Serve frontend files - only for HTML routes, not static assets
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Handle all other HTML routes by serving the main HTML file
+app.get(/^\/(?!api|images|uploads|.*\.(css|js|png|jpg|jpeg|gif|ico|svg)).*$/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Error handling middleware
@@ -99,19 +112,6 @@ app.use((err, req, res, next) => {
             : err.message,
         ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
     });
-});
-
-// Handle 404 for API routes
-app.use('/api/*', (req, res) => {
-    res.status(404).json({
-        error: 'API endpoint not found',
-        path: req.originalUrl
-    });
-});
-
-// Handle all other routes by serving the main HTML file
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
