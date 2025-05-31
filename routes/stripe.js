@@ -3,25 +3,76 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const router = express.Router();
 const DataManager = require('../utils/dataManager');
 const { auth } = require('../middleware/auth');
+const jwt = require('jsonwebtoken');
+
+// Test Stripe connection
+router.get('/test', async (req, res) => {
+    try {
+        console.log('Testing Stripe with key:', process.env.STRIPE_SECRET_KEY ? 'Key present' : 'No key');
+        
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [{
+                price_data: {
+                    currency: 'gbp',
+                    product_data: {
+                        name: 'Test Product'
+                    },
+                    unit_amount: 1000,
+                },
+                quantity: 1,
+            }],
+            mode: 'payment',
+            success_url: 'http://localhost:3000',
+            cancel_url: 'http://localhost:3000',
+        });
+        
+        res.json({ success: true, sessionId: session.id });
+    } catch (error) {
+        console.error('Stripe test error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 // Create checkout session
-router.post('/create-checkout-session', auth, async (req, res) => {
+router.post('/create-checkout-session', async (req, res) => {
     try {
-        const { items, shippingAddress, billingAddress } = req.body;
-        const user = req.user;
+        const { items, shippingAddress, billingAddress, customerEmail } = req.body;
+        
+        // Optional user authentication - allow guest checkouts
+        let user = null;
+        const authHeader = req.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            try {
+                const token = authHeader.substring(7);
+                const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
+                user = await DataManager.getUser(decoded.userId);
+            } catch (error) {
+                // Ignore auth errors for guest checkout
+                console.log('Guest checkout - no authentication');
+            }
+        }
 
-        // Validate items
         if (!items || !Array.isArray(items) || items.length === 0) {
-            return res.status(400).json({ error: 'No items provided' });
+            return res.status(400).json({ error: 'Items are required' });
+        }
+
+        // Validate email for guest checkout
+        const email = user?.email || customerEmail;
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required for checkout' });
         }
 
         // Get products and validate
         const products = await DataManager.getProducts();
+        console.log('Available products:', products.length);
         const lineItems = [];
         let totalAmount = 0;
 
         for (const item of items) {
+            console.log('Looking for product:', item.productId);
             const product = products.find(p => p.id === item.productId);
+            console.log('Found product:', product ? product.name : 'NOT FOUND');
             
             if (!product) {
                 return res.status(400).json({ error: `Product not found: ${item.productId}` });
@@ -35,6 +86,8 @@ router.post('/create-checkout-session', auth, async (req, res) => {
 
             const unitAmount = Math.round(product.price * 100); // Convert to pence
             totalAmount += unitAmount * item.quantity;
+            
+            console.log('Creating line item for:', product.name, 'at', unitAmount, 'pence');
 
             lineItems.push({
                 price_data: {
@@ -42,9 +95,6 @@ router.post('/create-checkout-session', auth, async (req, res) => {
                     product_data: {
                         name: product.name,
                         description: product.description,
-                        images: product.images?.map(img => 
-                            img.startsWith('http') ? img : `${req.protocol}://${req.get('host')}${img}`
-                        ),
                         metadata: {
                             productId: product.id,
                             brailleMessage: product.brailleMessage || '',
@@ -57,52 +107,27 @@ router.post('/create-checkout-session', auth, async (req, res) => {
             });
         }
 
-        // Calculate shipping
-        const settings = await DataManager.getSettings();
-        let shippingAmount = 0;
-        
-        if (totalAmount < settings.shipping.freeShippingThreshold * 100) {
-            shippingAmount = Math.round(settings.shipping.standardShipping * 100);
-            
-            lineItems.push({
-                price_data: {
-                    currency: 'gbp',
-                    product_data: {
-                        name: 'Standard Shipping',
-                        description: 'Standard delivery to UK addresses'
-                    },
-                    unit_amount: shippingAmount,
-                },
-                quantity: 1,
-            });
-        }
+        console.log('About to create Stripe session with', lineItems.length, 'items');
 
         // Create Stripe checkout session
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: lineItems,
             mode: 'payment',
-            success_url: `${req.protocol}://${req.get('host')}/order-success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${req.protocol}://${req.get('host')}/shop?cancelled=true`,
-            customer_email: user.email,
+            success_url: 'http://localhost:3000/#shop',
+            cancel_url: 'http://localhost:3000/#shop',
+            customer_email: email,
             metadata: {
-                userId: user.id,
-                shippingAddress: JSON.stringify(shippingAddress),
-                billingAddress: JSON.stringify(billingAddress),
+                userId: user?.id || null,
                 items: JSON.stringify(items)
-            },
-            shipping_address_collection: {
-                allowed_countries: ['GB', 'IE', 'US', 'CA', 'AU', 'NZ']
-            },
-            payment_intent_data: {
-                metadata: {
-                    userId: user.id,
-                    orderType: 'ecommerce'
-                }
             }
         });
 
-        res.json({ sessionId: session.id, url: session.url });
+        res.json({ 
+            success: true,
+            sessionId: session.id, 
+            url: session.url 
+        });
 
     } catch (error) {
         console.error('Stripe checkout error:', error);

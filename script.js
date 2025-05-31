@@ -572,12 +572,29 @@ class ScrollAnimations {
 class Shop {
     constructor() {
         this.categoryButtons = document.querySelectorAll('.shop-category .btn');
+        this.cart = JSON.parse(localStorage.getItem('cart')) || [];
+        this.products = [];
         
         this.init();
     }
     
-    init() {
+    async init() {
+        await this.loadProducts();
         this.handleCategoryClicks();
+        this.createCartUI();
+        this.updateCartDisplay();
+    }
+    
+    async loadProducts() {
+        try {
+            const response = await fetch('/api/products?available=true');
+            const data = await response.json();
+            this.products = data.products || [];
+            console.log('Loaded products:', this.products.length);
+        } catch (error) {
+            console.error('Failed to load products:', error);
+            this.products = [];
+        }
     }
     
     handleCategoryClicks() {
@@ -585,11 +602,335 @@ class Shop {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 
-                // For now, show a coming soon message
                 const category = button.parentElement.querySelector('h3').textContent;
-                this.showComingSoonMessage(category);
+                this.showProductModal(category);
             });
         });
+    }
+    
+    showProductModal(category) {
+        // Filter products by category
+        const categoryProducts = this.products.filter(product => {
+            const productName = product.name.toLowerCase();
+            return category.toLowerCase().includes('original') ? productName.includes('original') :
+                   category.toLowerCase().includes('print') ? productName.includes('print') :
+                   category.toLowerCase().includes('book') ? productName.includes('book') :
+                   category.toLowerCase().includes('merchandise') ? productName.includes('merch') :
+                   true; // Show all if no specific category
+        });
+        
+        if (categoryProducts.length === 0) {
+            this.showComingSoonMessage(category);
+            return;
+        }
+        
+        this.createProductModal(category, categoryProducts);
+    }
+    
+    createProductModal(category, products) {
+        // Remove existing modal
+        const existingModal = document.querySelector('.product-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        const modal = document.createElement('div');
+        modal.className = 'product-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        `;
+        
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+            background: white;
+            border-radius: 15px;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+        `;
+        
+        modalContent.innerHTML = `
+            <button class="modal-close" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+            <h2>🎨 ${category}</h2>
+            <div class="products-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                ${products.map(product => `
+                    <div class="product-card" style="border: 1px solid #eee; border-radius: 10px; padding: 15px; text-align: center;">
+                        <img src="${product.images?.[0] || '/images/Mr Dot Images1.jpg'}" alt="${product.name}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;">
+                        <h3 style="margin: 10px 0; font-size: 1.1em;">${product.name}</h3>
+                        <p style="color: #666; font-size: 0.9em; margin: 5px 0;">${product.description}</p>
+                        <p style="font-weight: bold; color: #667eea; font-size: 1.2em;">£${product.price}</p>
+                        <button class="add-to-cart-btn" data-product-id="${product._id}" style="
+                            background: #667eea;
+                            color: white;
+                            border: none;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            width: 100%;
+                            font-weight: bold;
+                        ">Add to Cart</button>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+        
+        // Add to cart functionality
+        modal.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const productId = e.target.dataset.productId;
+                this.addToCart(productId);
+                this.showAddedToCartMessage();
+            });
+        });
+    }
+    
+    addToCart(productId) {
+        const product = this.products.find(p => p._id === productId);
+        if (!product) return;
+        
+        const existingItem = this.cart.find(item => item.productId === productId);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            this.cart.push({
+                productId: productId,
+                name: product.name,
+                price: product.price,
+                quantity: 1,
+                image: product.images?.[0] || '/images/Mr Dot Images1.jpg'
+            });
+        }
+        
+        localStorage.setItem('cart', JSON.stringify(this.cart));
+        this.updateCartDisplay();
+    }
+    
+    createCartUI() {
+        // Add cart button to navigation
+        const nav = document.querySelector('.nav-menu');
+        if (nav && !document.querySelector('.cart-btn')) {
+            const cartBtn = document.createElement('li');
+            cartBtn.className = 'nav-item cart-btn';
+            cartBtn.innerHTML = `
+                <button class="nav-link cart-toggle" style="background: none; border: none; color: inherit; cursor: pointer;">
+                    🛒 Cart (<span class="cart-count">0</span>)
+                </button>
+            `;
+            nav.appendChild(cartBtn);
+            
+            cartBtn.querySelector('.cart-toggle').addEventListener('click', () => this.showCartModal());
+        }
+    }
+    
+    updateCartDisplay() {
+        const cartCount = document.querySelector('.cart-count');
+        if (cartCount) {
+            const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+    }
+    
+    showCartModal() {
+        const existingModal = document.querySelector('.cart-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        const modal = document.createElement('div');
+        modal.className = 'cart-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        `;
+        
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+            background: white;
+            border-radius: 15px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+        `;
+        
+        const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+        modalContent.innerHTML = `
+            <button class="modal-close" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+            <h2>🛒 Shopping Cart</h2>
+            ${this.cart.length === 0 ? 
+                '<p>Your cart is empty</p>' : 
+                `
+                <div class="cart-items">
+                    ${this.cart.map(item => `
+                        <div class="cart-item" style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee;">
+                            <img src="${item.image}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px; margin-right: 15px;">
+                            <div style="flex: 1;">
+                                <h4 style="margin: 0;">${item.name}</h4>
+                                <p style="margin: 5px 0; color: #666;">£${item.price} × ${item.quantity}</p>
+                            </div>
+                            <button class="remove-item" data-product-id="${item.productId}" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Remove</button>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee;">
+                    <h3>Total: £${total.toFixed(2)}</h3>
+                    <button class="checkout-btn" style="
+                        background: #28a745;
+                        color: white;
+                        border: none;
+                        padding: 15px 30px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        width: 100%;
+                        font-size: 1.1em;
+                        font-weight: bold;
+                        margin-top: 10px;
+                    ">Proceed to Checkout</button>
+                </div>
+                `
+            }
+        `;
+        
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+        
+        // Remove item functionality
+        modal.querySelectorAll('.remove-item').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const productId = e.target.dataset.productId;
+                this.cart = this.cart.filter(item => item.productId !== productId);
+                localStorage.setItem('cart', JSON.stringify(this.cart));
+                this.updateCartDisplay();
+                modal.remove();
+                this.showCartModal(); // Refresh the modal
+            });
+        });
+        
+        // Checkout functionality
+        const checkoutBtn = modal.querySelector('.checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener('click', () => {
+                modal.remove();
+                this.initiateCheckout();
+            });
+        }
+    }
+    
+    async initiateCheckout() {
+        if (this.cart.length === 0) return;
+        
+        try {
+            const response = await fetch('/api/stripe/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    items: this.cart.map(item => ({
+                        productId: item.productId,
+                        quantity: item.quantity
+                    }))
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Redirect to Stripe Checkout
+                window.location.href = data.url;
+            } else {
+                throw new Error(data.message);
+            }
+        } catch (error) {
+            console.error('Checkout error:', error);
+            this.showErrorMessage('Checkout failed. Please try again.');
+        }
+    }
+    
+    showAddedToCartMessage() {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: slideInRight 0.3s ease-out;
+        `;
+        
+        toast.textContent = '✅ Added to cart!';
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'slideOutRight 0.3s ease-in';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
+    }
+    
+    showErrorMessage(message) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #dc3545;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: slideInRight 0.3s ease-out;
+        `;
+        
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'slideOutRight 0.3s ease-in';
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
     }
     
     showComingSoonMessage(category) {
