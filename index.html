@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr Dot - The Braille Artist Redefining Accessibility in Art</title>
+    <meta name="description" content="Clarke Reynolds, aka Mr Dot, is a blind British artist who transforms tactile language into vibrant, interactive art — making creativity inclusive for everyone.">
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🎨</text></svg>">
+</head>
+<body>
+    <!-- Skip to main content for screen readers -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="#" class="logo" aria-label="Mr Dot - Home">
+                    <span class="logo-dot">●</span>
+                    <span class="logo-text">Mr Dot</span>
+                </a>
+            </div>
+            
+            <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            
+            <ul class="nav-menu" role="menubar">
+                <li class="nav-item" role="none">
+                    <a href="#home" class="nav-link active" role="menuitem">Home</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="#about" class="nav-link" role="menuitem">About</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="#gallery" class="nav-link" role="menuitem">Gallery</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="#shop" class="nav-link" role="menuitem">Shop</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="#contact" class="nav-link" role="menuitem">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Home Section -->
+        <section id="home" class="hero-section" aria-labelledby="hero-heading">
+            <div class="hero-background">
+                <div class="hero-image-container">
+                    <img src="images/Mr Dot Images1.jpg" alt="Clarke Reynolds, Mr Dot, working on a colorful Braille art piece" class="hero-image">
+                    <div class="hero-overlay"></div>
+                </div>
+            </div>
+            
+            <div class="hero-content">
+                <h1 id="hero-heading" class="hero-title">
+                    <span class="hero-emoji" aria-hidden="true">🎨</span>
+                    Mr Dot: The Braille Artist Redefining Accessibility in Art
+                </h1>
+                
+                <p class="hero-subtitle">
+                    Clarke Reynolds, aka Mr Dot, is a blind British artist who transforms tactile language into vibrant, interactive art — making creativity inclusive for everyone.
+                </p>
+                
+                <div class="hero-buttons">
+                    <a href="#gallery" class="btn btn-primary">
+                        <span class="btn-emoji" aria-hidden="true">🔹</span>
+                        Explore the Gallery
+                    </a>
+                    <a href="#shop" class="btn btn-secondary">
+                        <span class="btn-emoji" aria-hidden="true">🔹</span>
+                        Visit the Shop
+                    </a>
+                    <a href="#about" class="btn btn-outline">
+                        <span class="btn-emoji" aria-hidden="true">🔹</span>
+                        Learn About Clarke
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Scroll indicator -->
+            <div class="scroll-indicator" aria-hidden="true">
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <!-- About Preview Section -->
+        <section class="about-preview" aria-labelledby="about-preview-heading">
+            <div class="container">
+                <div class="about-preview-content">
+                    <div class="about-preview-text">
+                        <h2 id="about-preview-heading">Who Is Mr Dot?</h2>
+                        <p>Born in Portsmouth and diagnosed with Retinitis Pigmentosa, Clarke Reynolds lost his sight but never his artistic vision. Today, he pioneers a unique form of art that turns Braille into bold, colorful, touchable creations for both sighted and visually impaired audiences.</p>
+                    </div>
+                    <div class="about-preview-image">
+                        <img src="images/Mr Dot Images2.jpg" alt="Close-up of Clarke Reynolds creating tactile Braille art with vibrant colors" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Works Section -->
+        <section class="featured-works" aria-labelledby="featured-works-heading">
+            <div class="container">
+                <h2 id="featured-works-heading">Featured Works & Exhibitions</h2>
+                
+                <div class="featured-grid">
+                    <article class="featured-item">
+                        <div class="featured-image">
+                            <img src="images/Mr Dot Images3.jpg" alt="Journey by Dots exhibition artwork showing colorful Braille patterns" loading="lazy">
+                        </div>
+                        <div class="featured-content">
+                            <h3>Journey by Dots</h3>
+                            <p>A personal visual-tactile odyssey</p>
+                        </div>
+                    </article>
+                    
+                    <article class="featured-item">
+                        <div class="featured-image">
+                            <img src="images/Mr Dot Images4.jpg" alt="Five Degrees of Vision artwork merging visual and tactile elements" loading="lazy">
+                        </div>
+                        <div class="featured-content">
+                            <h3>Five Degrees of Vision</h3>
+                            <p>Merging visual and tactile perception</p>
+                        </div>
+                    </article>
+                    
+                    <article class="featured-item">
+                        <div class="featured-image">
+                            <img src="images/Mr Dot Images5.jpg" alt="Windows of the Soul collaborative artwork display" loading="lazy">
+                        </div>
+                        <div class="featured-content">
+                            <h3>Windows of the Soul</h3>
+                            <p>Collaborating with mainstream artists</p>
+                        </div>
+                    </article>
+                    
+                    <article class="featured-item">
+                        <div class="featured-image">
+                            <img src="images/Mr Dot Images6.jpg" alt="Mr Dot Day celebration in Portsmouth with community artwork" loading="lazy">
+                        </div>
+                        <div class="featured-content">
+                            <h3>Mr Dot Day</h3>
+                            <p>Portsmouth's tribute to Clarke's evolving legacy</p>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="featured-cta">
+                    <a href="#gallery" class="btn btn-primary">
+                        <span class="btn-emoji" aria-hidden="true">📷</span>
+                        Preview Gallery
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Feature Section -->
+        <section class="video-feature" aria-labelledby="video-heading">
+            <div class="container">
+                <h2 id="video-heading">
+                    <span class="section-emoji" aria-hidden="true">🎥</span>
+                    Meet Mr Dot: The Blind Braille Artist
+                </h2>
+                
+                <div class="video-container">
+                    <div class="video-placeholder">
+                        <img src="images/Mr Dot Images7.jpg" alt="Clarke Reynolds in his studio surrounded by colorful Braille artwork" loading="lazy">
+                        <div class="video-overlay">
+                            <button class="play-button" aria-label="Play video about Clarke Reynolds' journey">
+                                <span class="play-icon" aria-hidden="true">▶</span>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="video-description">A short documentary showcasing Clarke's journey, studio process, and philosophy.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section" aria-labelledby="stats-heading">
+            <div class="container">
+                <h2 id="stats-heading" class="sr-only">Quick Stats & Accolades</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-icon" aria-hidden="true">👨‍🏫</div>
+                        <div class="stat-number">15,000+</div>
+                        <div class="stat-label">children reached through interactive school workshops</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon" aria-hidden="true">📚</div>
+                        <div class="stat-number">Author</div>
+                        <div class="stat-label">of Mr Dot and His Magical White Cane Adventures</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon" aria-hidden="true">🏅</div>
+                        <div class="stat-number">Nominee</div>
+                        <div class="stat-label">National Diversity Awards: Positive Disability Role Model</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="about-section" aria-labelledby="about-heading">
+            <div class="container">
+                <h2 id="about-heading">
+                    <span class="section-emoji" aria-hidden="true">👤</span>
+                    Meet Clarke Reynolds — Mr Dot
+                </h2>
+                
+                <div class="about-content">
+                    <article class="about-story">
+                        <h3>Early Life & Vision Loss</h3>
+                        <div class="story-content">
+                            <img src="images/Mr Dot Images8.jpg" alt="Young Clarke Reynolds before vision loss" loading="lazy" class="story-image">
+                            <p>Clarke Reynolds was born with limited vision in his right eye. In his 30s, he was diagnosed with Retinitis Pigmentosa, a condition that led to progressive blindness. Undeterred, Clarke pursued his passion for art, graduating with a BA Honours degree in model making. His first career as a dental model maker ended due to his vision loss, prompting him to reinvent himself — not as someone who left art behind, but as someone who redefined it entirely.</p>
+                        </div>
+                    </article>
+                    
+                    <article class="about-story">
+                        <h3>The Artistic Evolution</h3>
+                        <div class="story-content">
+                            <img src="images/Mr Dot Images9.jpg" alt="Clarke's early pointillism work transitioning to Braille art" loading="lazy" class="story-image">
+                            <p>Clarke's fascination with dots began with pointillism — but as his sight dimmed, his world of dots became literal. He began "seeing through a thousand dots" and turned this experience into an artistic superpower. By merging oversized Braille symbols with vibrant colors and tactile textures, Clarke created a visual language that bridges sight and touch. His unique 26-color Braille alphabet allows audiences to decode hidden messages within the work — transforming each piece into a layered, interactive experience.</p>
+                        </div>
+                    </article>
+                    
+                    <article class="about-story">
+                        <h3>Advocacy & Mission</h3>
+                        <div class="story-content">
+                            <img src="images/Mr Dot Images10.jpg" alt="Clarke in his signature Braille-patterned suit teaching children" loading="lazy" class="story-image">
+                            <p>Beyond galleries, Clarke brings Braille to life in classrooms, museums, and public installations. Dressed in a Braille-patterned suit, he has engaged over 15,000 children in sensory workshops that inspire empathy and inclusion. Through books, talks, and exhibitions, Clarke shows that vision isn't just about sight — it's about perspective.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="gallery-section" aria-labelledby="gallery-heading">
+            <div class="container">
+                <h2 id="gallery-heading">
+                    <span class="section-emoji" aria-hidden="true">🖼️</span>
+                    Gallery
+                </h2>
+                
+                <p class="gallery-intro">Every dot tells a story. In Clarke's world, Braille becomes bold, colorful, and emotional. This gallery offers a space to feel, read, and reflect — showcasing works that invite both the eyes and the hands to explore.</p>
+                
+                <!-- Gallery Filters -->
+                <div class="gallery-filters" role="tablist" aria-label="Gallery collection filters">
+                    <button class="filter-btn active" role="tab" aria-selected="true" data-filter="all">All Works</button>
+                    <button class="filter-btn" role="tab" aria-selected="false" data-filter="journey">Journey by Dots</button>
+                    <button class="filter-btn" role="tab" aria-selected="false" data-filter="vision">Five Degrees of Vision</button>
+                    <button class="filter-btn" role="tab" aria-selected="false" data-filter="windows">Windows of the Soul</button>
+                    <button class="filter-btn" role="tab" aria-selected="false" data-filter="dotday">Mr Dot Day</button>
+                </div>
+                
+                <!-- Gallery Grid -->
+                <div class="gallery-grid" role="tabpanel">
+                    <div class="gallery-item" data-collection="journey">
+                        <img src="images/Mr Dot Images11.jpg" alt="Colorful Braille artwork from Journey by Dots collection" loading="lazy">
+                        <div class="gallery-overlay">
+                            <h4>Journey Through Touch</h4>
+                            <p class="braille-message" data-braille="⠓⠕⠏⠑">Hope</p>
+                            <button class="decode-btn" aria-label="Decode Braille message">Decode</button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-collection="vision">
+                        <img src="images/Mr Dot Images12.jpg" alt="Multi-sensory artwork from Five Degrees of Vision" loading="lazy">
+                        <div class="gallery-overlay">
+                            <h4>Tactile Rainbow</h4>
+                            <p class="braille-message" data-braille="⠇⠕⠧⠑">Love</p>
+                            <button class="decode-btn" aria-label="Decode Braille message">Decode</button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-collection="windows">
+                        <img src="images/Mr Dot Images13.jpg" alt="Collaborative piece from Windows of the Soul exhibition" loading="lazy">
+                        <div class="gallery-overlay">
+                            <h4>Soul Connection</h4>
+                            <p class="braille-message" data-braille="⠥⠝⠊⠞⠽">Unity</p>
+                            <button class="decode-btn" aria-label="Decode Braille message">Decode</button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-collection="dotday">
+                        <img src="images/Mr Dot Images14.jpg" alt="Community artwork from Mr Dot Day celebration" loading="lazy">
+                        <div class="gallery-overlay">
+                            <h4>Community Spirit</h4>
+                            <p class="braille-message" data-braille="⠚⠕⠽">Joy</p>
+                            <button class="decode-btn" aria-label="Decode Braille message">Decode</button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-collection="journey">
+                        <img src="images/Mr Dot Images15.jpg" alt="Personal reflection piece from Journey by Dots" loading="lazy">
+                        <div class="gallery-overlay">
+                            <h4>Inner Light</h4>
+                            <p class="braille-message" data-braille="⠙⠗⠑⠁⠍">Dream</p>
+                            <button class="decode-btn" aria-label="Decode Braille message">Decode</button>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item" data-collection="vision">
+                        <img src="images/Mr Dot Images16.jpg" alt="Sensory exploration artwork" loading="lazy">
+                        <div class="gallery-overlay">
+                            <h4>Beyond Sight</h4>
+                            <p class="braille-message" data-braille="⠋⠑⠑⠇">Feel</p>
+                            <button class="decode-btn" aria-label="Decode Braille message">Decode</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shop Section -->
+        <section id="shop" class="shop-section" aria-labelledby="shop-heading">
+            <div class="container">
+                <h2 id="shop-heading">
+                    <span class="section-emoji" aria-hidden="true">🛍️</span>
+                    Shop
+                </h2>
+                
+                <p class="shop-intro">Bring a piece of accessible, inclusive art into your world. Clarke's work doesn't just belong in galleries — it belongs in homes, schools, and hearts.</p>
+                
+                <!-- Shop Categories -->
+                <div class="shop-categories">
+                    <div class="shop-category">
+                        <div class="category-icon" aria-hidden="true">🎨</div>
+                        <h3>Original Works</h3>
+                        <p>One-of-a-kind Braille art on wood, canvas, and mixed media</p>
+                        <div class="category-preview">
+                            <img src="images/Mr Dot Images17.jpg" alt="Original Braille artwork on wood panel" loading="lazy">
+                        </div>
+                        <button class="btn btn-outline">Explore Originals</button>
+                    </div>
+                    
+                    <div class="shop-category">
+                        <div class="category-icon" aria-hidden="true">🖼️</div>
+                        <h3>Braille Prints</h3>
+                        <p>High-quality, vivid reproductions with decoded messages</p>
+                        <div class="category-preview">
+                            <img src="images/Mr Dot Images18.jpg" alt="High-quality Braille art print with vibrant colors" loading="lazy">
+                        </div>
+                        <button class="btn btn-outline">Browse Prints</button>
+                    </div>
+                    
+                    <div class="shop-category">
+                        <div class="category-icon" aria-hidden="true">📚</div>
+                        <h3>Books & Storytelling</h3>
+                        <p>Mr Dot and His Magical White Cane Adventures, Braille story cards and learning tools for kids</p>
+                        <div class="category-preview">
+                            <img src="images/Mr Dot Images19.jpg" alt="Mr Dot's children's book and Braille learning materials" loading="lazy">
+                        </div>
+                        <button class="btn btn-outline">Shop Books</button>
+                    </div>
+                    
+                    <div class="shop-category">
+                        <div class="category-icon" aria-hidden="true">👕</div>
+                        <h3>Merchandise</h3>
+                        <p>Wearable art inspired by Clarke's iconic Braille suit and patterns</p>
+                        <div class="category-preview">
+                            <img src="images/Mr Dot Images20.jpg" alt="Braille-patterned clothing and accessories" loading="lazy">
+                        </div>
+                        <button class="btn btn-outline">View Merchandise</button>
+                    </div>
+                </div>
+                
+                <!-- Shop Features -->
+                <div class="shop-features">
+                    <div class="feature-item">
+                        <span class="feature-icon" aria-hidden="true">🔐</span>
+                        <span>Secure checkout with Stripe</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon" aria-hidden="true">📖</span>
+                        <span>Optional audio descriptions</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon" aria-hidden="true">👆</span>
+                        <span>Decode option to reveal hidden messages</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon" aria-hidden="true">📦</span>
+                        <span>Accessibility-conscious packaging</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section" aria-labelledby="contact-heading">
+            <div class="container">
+                <h2 id="contact-heading">
+                    <span class="section-emoji" aria-hidden="true">📞</span>
+                    Let's Connect
+                </h2>
+                
+                <p class="contact-intro">Whether you're interested in purchasing a piece, hosting a workshop, arranging a gallery show, or just want to say hello — Clarke would love to hear from you.</p>
+                
+                <div class="contact-content">
+                    <div class="contact-form-container">
+                        <form class="contact-form" aria-labelledby="contact-form-heading">
+                            <h3 id="contact-form-heading" class="sr-only">Contact Form</h3>
+                            
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required aria-describedby="name-error">
+                                <span id="name-error" class="error-message" role="alert"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required aria-describedby="email-error">
+                                <span id="email-error" class="error-message" role="alert"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="purpose">Purpose of enquiry</label>
+                                <select id="purpose" name="purpose" required aria-describedby="purpose-error">
+                                    <option value="">Please select...</option>
+                                    <option value="art-purchase">Art Purchase</option>
+                                    <option value="workshop">Workshop</option>
+                                    <option value="collaboration">Collaboration</option>
+                                    <option value="press">Press</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <span id="purpose-error" class="error-message" role="alert"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" required aria-describedby="message-error"></textarea>
+                                <span id="message-error" class="error-message" role="alert"></span>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h3>Additional Contact Info</h3>
+                        <div class="contact-details">
+                            <p>
+                                <span class="contact-icon" aria-hidden="true">📧</span>
+                                <strong>Email:</strong> hello@mrdot.art
+                            </p>
+                            <p>
+                                <span class="contact-icon" aria-hidden="true">📍</span>
+                                <strong>Based in:</strong> Portsmouth, UK
+                            </p>
+                            <p>
+                                <span class="contact-icon" aria-hidden="true">📱</span>
+                                <strong>Social:</strong> @mrdotart
+                            </p>
+                            <p>
+                                <span class="contact-icon" aria-hidden="true">🔗</span>
+                                <strong>Media kit:</strong> Available upon request
+                            </p>
+                        </div>
+                        
+                        <div class="contact-image">
+                            <img src="images/Mr Dot Images21.jpg" alt="Clarke Reynolds in his art studio" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-dot">●</span>
+                        <span class="logo-text">Mr Dot</span>
+                    </div>
+                    <p>Transforming tactile language into vibrant, inclusive art</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-section">
+                        <h4>Explore</h4>
+                        <ul>
+                            <li><a href="#about">About Clarke</a></li>
+                            <li><a href="#gallery">Gallery</a></li>
+                            <li><a href="#shop">Shop</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="#" aria-label="Instagram">Instagram</a></li>
+                            <li><a href="#" aria-label="TikTok">TikTok</a></li>
+                            <li><a href="#" aria-label="YouTube">YouTube</a></li>
+                            <li><a href="#" aria-label="Email">Email</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Mr Dot. All rights reserved. | Accessibility-first design</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html> 
