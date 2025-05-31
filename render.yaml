@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: mrdot-ecommerce
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: STRIPE_PUBLISHABLE_KEY
+        value: pk_test_51RUtVXIg3xJNB2OTjoRm762MpY2oPgPp1y2bHukFFX3LAEvxWISVKzncygx1vYZosxBUqqH4tyw31bBHXddlVyRG00whDA9nc6
+      - key: STRIPE_SECRET_KEY
+        value: sk_test_51RUtVXIg3xJNB2OTAICnUaBBDSs9XsvJa4m7qlHkaXzigznYroEsJx8lqI2Iy0Kt2pbmEbKDl8MQxLLQyz9gitI000cs3urNhC
+      - key: JWT_SECRET
+        value: mr_dot_super_secret_key_2024_braille_art_platform
+      - key: DATA_DIR
+        value: ./data
+      - key: UPLOADS_DIR
+        value: ./uploads
+      - key: ADMIN_EMAIL
+        value: admin@mrdot.com
+      - key: ADMIN_PASSWORD
+        value: MrDot2024Admin!
+    domains:
+      - mrdot-ecommerce.onrender.com 
