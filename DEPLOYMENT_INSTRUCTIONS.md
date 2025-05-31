@@ -49,14 +49,18 @@ Set these exactly in your Render service environment:
 ```
 NODE_ENV=production
 PORT=10000
-STRIPE_PUBLISHABLE_KEY=pk_test_51RUtVXIg3xJNB2OTjoRm762MpY2oPgPp1y2bHukFFX3LAEvxWISVKzncygx1vYZosxBUqqH4tyw31bBHXddlVyRG00whDA9nc6
-STRIPE_SECRET_KEY=sk_test_51RUtVXIg3xJNB2OTAICnUaBBDSs9XsvJa4m7qlHkaXzigznYroEsJx8lqI2Iy0Kt2pbmEbKDl8MQxLLQyz9gitI000cs3urNhC
+STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_STRIPE_PUBLISHABLE_KEY_HERE
+STRIPE_SECRET_KEY=sk_test_YOUR_STRIPE_SECRET_KEY_HERE
 JWT_SECRET=mr_dot_super_secret_key_2024_braille_art_platform
 DATA_DIR=./data
 UPLOADS_DIR=./uploads
 ADMIN_EMAIL=admin@mrdot.com
 ADMIN_PASSWORD=MrDot2024Admin!
 ```
+
+**🔑 IMPORTANT:** Replace the Stripe placeholder keys with your actual test keys:
+- Publishable Key: `pk_test_51RUtVXIg3xJNB2OTjoRm762MpY2oPgPp1y2bHukFFX3LAEvxWISVKzncygx1vYZosxBUqqH4tyw31bBHXddlVyRG00whDA9nc6`
+- Secret Key: `sk_test_51RUtVXIg3xJNB2OTAICnUaBBDSs9XsvJa4m7qlHkaXzigznYroEsJx8lqI2Iy0Kt2pbmEbKDl8MQxLLQyz9gitI000cs3urNhC`
 
 ## 🔧 **Build Settings for Render**
 

@@ -39,9 +39,9 @@ A comprehensive e-commerce platform for Mr Dot (Clarke Reynolds), featuring acce
    PORT=3000
    NODE_ENV=development
 
-   # Stripe Configuration (your test keys)
-   STRIPE_PUBLISHABLE_KEY=pk_test_51RUtVXIg3xJNB2OTjoRm762MpY2oPgPp1y2bHukFFX3LAEvxWISVKzncygx1vYZosxBUqqH4tyw31bBHXddlVyRG00whDA9nc6
-   STRIPE_SECRET_KEY=sk_test_51RUtVXIg3xJNB2OTAICnUaBBDSs9XsvJa4m7qlHkaXzigznYroEsJx8lqI2Iy0Kt2pbmEbKDl8MQxLLQyz9gitI000cs3urNhC
+   # Stripe Configuration (replace with your test keys)
+   STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_STRIPE_PUBLISHABLE_KEY_HERE
+   STRIPE_SECRET_KEY=sk_test_YOUR_STRIPE_SECRET_KEY_HERE
    STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
 
    # JWT Configuration
