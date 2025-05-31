@@ -609,15 +609,27 @@ class Shop {
     }
     
     showProductModal(category) {
+        // Map UI category names to product categories
+        const categoryMap = {
+            'original works': 'originals',
+            'braille prints': 'prints', 
+            'books & storytelling': 'books',
+            'merchandise': 'merchandise'
+        };
+        
+        const categoryKey = Object.keys(categoryMap).find(key => 
+            category.toLowerCase().includes(key.split(' ')[0].toLowerCase())
+        );
+        
+        const targetCategory = categoryMap[categoryKey] || 'all';
+        
         // Filter products by category
-        const categoryProducts = this.products.filter(product => {
-            const productName = product.name.toLowerCase();
-            return category.toLowerCase().includes('original') ? productName.includes('original') :
-                   category.toLowerCase().includes('print') ? productName.includes('print') :
-                   category.toLowerCase().includes('book') ? productName.includes('book') :
-                   category.toLowerCase().includes('merchandise') ? productName.includes('merch') :
-                   true; // Show all if no specific category
-        });
+        const categoryProducts = targetCategory === 'all' ? 
+            this.products : 
+            this.products.filter(product => product.category === targetCategory);
+        
+        console.log(`Filtering for category: ${category} -> ${targetCategory}`);
+        console.log(`Found ${categoryProducts.length} products:`, categoryProducts);
         
         if (categoryProducts.length === 0) {
             this.showComingSoonMessage(category);
@@ -671,7 +683,7 @@ class Shop {
                         <h3 style="margin: 10px 0; font-size: 1.1em;">${product.name}</h3>
                         <p style="color: #666; font-size: 0.9em; margin: 5px 0;">${product.description}</p>
                         <p style="font-weight: bold; color: #667eea; font-size: 1.2em;">£${product.price}</p>
-                        <button class="add-to-cart-btn" data-product-id="${product._id}" style="
+                        <button class="add-to-cart-btn" data-product-id="${product.id}" style="
                             background: #667eea;
                             color: white;
                             border: none;
@@ -706,7 +718,7 @@ class Shop {
     }
     
     addToCart(productId) {
-        const product = this.products.find(p => p._id === productId);
+        const product = this.products.find(p => p.id === productId);
         if (!product) return;
         
         const existingItem = this.cart.find(item => item.productId === productId);
@@ -857,6 +869,99 @@ class Shop {
     async initiateCheckout() {
         if (this.cart.length === 0) return;
         
+        // Show email collection modal for guest checkout
+        const emailModal = document.createElement('div');
+        emailModal.className = 'email-modal';
+        emailModal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        `;
+        
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+            background: white;
+            border-radius: 15px;
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
+        `;
+        
+        modalContent.innerHTML = `
+            <h3>🛒 Complete Your Order</h3>
+            <p>Enter your email to proceed to secure checkout:</p>
+            <input type="email" id="checkout-email" placeholder="your@email.com" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #ddd;
+                border-radius: 8px;
+                margin: 15px 0;
+                font-size: 16px;
+            ">
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="cancel-checkout" style="
+                    flex: 1;
+                    padding: 12px;
+                    border: 2px solid #667eea;
+                    background: white;
+                    color: #667eea;
+                    border-radius: 8px;
+                    cursor: pointer;
+                ">Cancel</button>
+                <button class="proceed-checkout" style="
+                    flex: 1;
+                    padding: 12px;
+                    border: none;
+                    background: #667eea;
+                    color: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                ">Proceed to Payment</button>
+            </div>
+        `;
+        
+        emailModal.appendChild(modalContent);
+        document.body.appendChild(emailModal);
+        
+        // Focus on email input
+        const emailInput = emailModal.querySelector('#checkout-email');
+        emailInput.focus();
+        
+        // Handle cancel
+        emailModal.querySelector('.cancel-checkout').addEventListener('click', () => {
+            emailModal.remove();
+        });
+        
+        // Handle proceed
+        emailModal.querySelector('.proceed-checkout').addEventListener('click', async () => {
+            const email = emailInput.value.trim();
+            
+            if (!email || !email.includes('@')) {
+                emailInput.style.borderColor = '#dc3545';
+                return;
+            }
+            
+            emailModal.remove();
+            await this.processCheckout(email);
+        });
+        
+        // Handle enter key
+        emailInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                emailModal.querySelector('.proceed-checkout').click();
+            }
+        });
+    }
+    
+    async processCheckout(customerEmail) {
         try {
             const response = await fetch('/api/stripe/create-checkout-session', {
                 method: 'POST',
@@ -867,17 +972,19 @@ class Shop {
                     items: this.cart.map(item => ({
                         productId: item.productId,
                         quantity: item.quantity
-                    }))
+                    })),
+                    customerEmail: customerEmail
                 })
             });
             
             const data = await response.json();
             
             if (data.success) {
-                // Redirect to Stripe Checkout
+                // Clear cart and redirect to Stripe Checkout
+                localStorage.removeItem('cart');
                 window.location.href = data.url;
             } else {
-                throw new Error(data.message);
+                throw new Error(data.message || 'Checkout failed');
             }
         } catch (error) {
             console.error('Checkout error:', error);
